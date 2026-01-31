@@ -55,9 +55,6 @@
             overflow: hidden;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             transition: all 0.5s ease;
-            position: relative;
-            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
-            height: 0;
         }
 
         .video-container.shrink {
@@ -65,13 +62,11 @@
             margin-bottom: 10px;
         }
 
-        .video-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
+        video {
             width: 100%;
-            height: 100%;
-            border: none;
+            height: auto;
+            display: block;
+            border-radius: 15px;
         }
 
         /* Start Button for First Video */
@@ -348,13 +343,13 @@
         <!-- First Video Section -->
         <div id="videoSection1" style="display: none;">
             <div class="video-container" id="video1Container">
-                <video
-                    id="video1"
-                    src="videos/proposal.mp4"
-                    playsinline
-                    muted
-                    preload="auto"
-                    ></video>
+                <!-- LOCAL VIDEO PATH - Update this to match your video filename -->
+                <!-- If your video is named "video1.mp4", use: src="video1.mp4" -->
+                <!-- If in a folder, use: src="videos/video1.mp4" -->
+                <video id="firstVideo" playsinline autoplay muted>
+                    <source src="video1.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
             </div>
         </div>
 
@@ -380,11 +375,11 @@
             
             <!-- Second Video -->
             <div class="video-container">
-                <video
-                    id="video2"
-                    src="videos/celebration.mp4"playsinline
-                    preload="auto"
-                    ></video>
+                <!-- LOCAL VIDEO PATH - Update this to match your second video filename -->
+                <video id="secondVideo" playsinline autoplay>
+                    <source src="video2.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
             </div>
 
             <p>And as a special gift for you... 🎁</p>
@@ -424,6 +419,13 @@
             // Show first video
             document.getElementById('videoSection1').style.display = 'block';
             
+            // Play the video
+            const firstVideo = document.getElementById('firstVideo');
+            firstVideo.play();
+            
+            // Listen for video end
+            firstVideo.addEventListener('ended', showQuestion);
+            
             // Show continue button after 5 seconds
             setTimeout(() => {
                 if (!videoEnded) {
@@ -431,7 +433,7 @@
                 }
             }, 5000);
             
-            // Auto-show question after video duration (10 seconds for your video)
+            // Fallback: Auto-show question after 10 seconds if video doesn't trigger
             setTimeout(() => {
                 showQuestion();
             }, 10000);
@@ -508,10 +510,14 @@
             // Create confetti
             createConfetti();
             
-            // Play wedding music at lower volume (20% volume so video can be heard)
+            // Play wedding music at lower volume (20% so video can be heard)
             const music = document.getElementById('weddingMusic');
-            music.volume = 0.2; // Set volume to 20%
-            music.play().catch(e => console.log("Audio autoplay blocked - user can unmute"));
+            music.volume = 0.2;
+            music.play().catch(e => console.log("Audio autoplay blocked"));
+            
+            // Play second video
+            const secondVideo = document.getElementById('secondVideo');
+            secondVideo.play().catch(e => console.log("Video autoplay blocked"));
         }
 
         function createConfetti() {
@@ -547,6 +553,5 @@
             noBtn.style.transform = 'translateX(-50%)';
         });
     </script>
-    <script src="script.js"></script>
 </body>
 </html>
