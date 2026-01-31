@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will You Be My Valentine? 💕</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #ff6b9d 0%, #c06c84 50%, #f67280 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .card {
+            background: white;
+            border-radius: 30px;
+            padding: 40px 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+            position: relative;
+            animation: fadeIn 0.6s ease-in;
+            z-index: 1;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Video Containers */
+        .video-container {
+            width: 100%;
+            margin-bottom: 20px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: all 0.5s ease;
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+        }
+
+        .video-container.shrink {
+            transform: scale(0.7);
+            margin-bottom: 10px;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Start Button for First Video */
+        .start-button {
+            background: linear-gradient(135deg, #ff6b9d, #ff8fab);
+            color: white;
+            padding: 20px 50px;
+            font-size: 24px;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(255, 107, 157, 0.4);
+            transition: all 0.3s ease;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .start-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(255, 107, 157, 0.6);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        #startScreen {
+            text-align: center;
+        }
+
+        #startScreen h1 {
+            color: #ff6b9d;
+            font-size: 32px;
+            margin-bottom: 30px;
+        }
+
+        #startScreen .heart {
+            font-size: 80px;
+            margin-bottom: 30px;
+            animation: heartbeat 1.5s ease-in-out infinite;
+        }
+
+        /* Question Section */
+        #questionSection {
+            display: none;
+            animation: slideDown 0.5s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .heart {
+            font-size: 60px;
+            animation: heartbeat 1.5s ease-in-out infinite;
+            margin-bottom: 15px;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            10%, 30% { transform: scale(0.9); }
+            20%, 40% { transform: scale(1.1); }
+        }
+
+        h1 {
+            color: #ff6b9d;
+            font-size: 28px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        p {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .button-container {
+            position: relative;
+            height: 150px;
+            width: 100%;
+        }
+
+        button {
+            padding: 15px 40px;
+            font-size: 20px;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            position: absolute;
+        }
+
+        #yesBtn {
+            background: linear-gradient(135deg, #ff6b9d, #ff8fab);
+            color: white;
+            left: 50%;
+            top: 20px;
+            transform: translateX(-50%);
+            z-index: 10;
+        }
+
+        #yesBtn:hover {
+            transform: translateX(-50%) scale(1.1);
+            box-shadow: 0 8px 25px rgba(255, 107, 157, 0.4);
+        }
+
+        #noBtn {
+            background: #f0f0f0;
+            color: #666;
+            transition: all 0.3s ease;
+            z-index: 5;
+        }
+
+        #noBtn:hover {
+            background: #e0e0e0;
+        }
+
+        .attempt-counter {
+            margin-top: 160px;
+            color: #ff6b9d;
+            font-size: 14px;
+            font-style: italic;
+        }
+
+        /* Success Section */
+        #successSection {
+            display: none;
+            animation: fadeIn 0.6s ease-in;
+        }
+
+        .celebration {
+            font-size: 50px;
+            margin: 20px 0;
+        }
+
+        #successSection h2 {
+            color: #ff6b9d;
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+
+        #successSection p {
+            color: #666;
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .youtube-link {
+            display: inline-block;
+            background: linear-gradient(135deg, #FF0000, #CC0000);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .youtube-link:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(255, 0, 0, 0.4);
+        }
+
+        /* Confetti */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #ff6b9d;
+            position: absolute;
+            animation: confetti-fall 3s linear forwards;
+        }
+
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Continue button */
+        .continue-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            padding: 10px 20px;
+            background: rgba(255, 107, 157, 0.9);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            z-index: 1000;
+            display: none;
+        }
+
+        .continue-btn:hover {
+            background: rgba(255, 107, 157, 1);
+            transform: scale(1.05);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 480px) {
+            .card {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+            
+            p {
+                font-size: 14px;
+            }
+            
+            button {
+                padding: 12px 30px;
+                font-size: 18px;
+            }
+            
+            .heart {
+                font-size: 50px;
+            }
+
+            #successSection h2 {
+                font-size: 26px;
+            }
+
+            .start-button {
+                padding: 15px 40px;
+                font-size: 20px;
+            }
+
+            #startScreen h1 {
+                font-size: 26px;
+            }
+
+            .continue-btn {
+                bottom: 20px;
+                right: 20px;
+                font-size: 14px;
+                padding: 8px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button id="continueBtn" class="continue-btn" onclick="showQuestion()">Continue ➡️</button>
+
+    <div class="card">
+        <!-- Start Screen -->
+        <div id="startScreen">
+            <div class="heart">💕</div>
+            <h1>I have something special to ask you...</h1>
+            <button class="start-button" onclick="startExperience()">Click to Start ✨</button>
+        </div>
+
+        <!-- First Video Section -->
+        <div id="videoSection1" style="display: none;">
+            <div class="video-container" id="video1Container">
+                <iframe 
+                    id="firstVideo"
+                    src="https://drive.google.com/file/d/1rbywAQIyDmxzswYADyXjY-QUHROkkzI8/preview?autoplay=1"
+                    allow="autoplay">
+                </iframe>
+            </div>
+        </div>
+
+        <!-- Question Section (Hidden Initially) -->
+        <div id="questionSection">
+            <div class="heart">❤️</div>
+            <h1>Will You Be My Valentine?</h1>
+            <p>So... what do you say? 💕</p>
+            
+            <div class="button-container">
+                <button id="yesBtn" onclick="sayYes()">Yes! 💕</button>
+                <button id="noBtn" onmouseover="moveButton()" ontouchstart="moveButton(event)">No</button>
+            </div>
+            
+            <div class="attempt-counter" id="counter"></div>
+        </div>
+
+        <!-- Success Section (Hidden Initially) -->
+        <div id="successSection">
+            <div class="celebration">🎉💕🎊</div>
+            <h2>Yay! You said Yes!</h2>
+            <p>You just made me the happiest person ever! 💖</p>
+            
+            <!-- Second Video -->
+            <div class="video-container">
+                <iframe 
+                    id="secondVideo"
+                    src="https://drive.google.com/file/d/1iQKsRNB0NpIaNy2zaDVvu3IuU2ht8uSw/preview?autoplay=1"
+                    allow="autoplay">
+                </iframe>
+            </div>
+
+            <p>And as a special gift for you... 🎁</p>
+            
+            <a href="https://www.youtube.com/@theroyalutkarsh2895" target="_blank" class="youtube-link">
+                🎬 Check out my childhood YouTube channel!
+            </a>
+            
+            <div class="celebration">✨💝✨</div>
+        </div>
+    </div>
+
+    <!-- Audio for wedding music -->
+    <audio id="weddingMusic" loop>
+        <source src="https://www.bensound.com/bensound-music/bensound-happyrock.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        let noClickAttempts = 0;
+        const noButtonTexts = [
+            "No",
+            "Are you sure?",
+            "Really? 🥺",
+            "Think again!",
+            "Pretty please? 🙏",
+            "Last chance!",
+            "You know you want to!",
+            "Yes? 😊"
+        ];
+
+        let videoEnded = false;
+
+        function startExperience() {
+            // Hide start screen
+            document.getElementById('startScreen').style.display = 'none';
+            
+            // Show first video
+            document.getElementById('videoSection1').style.display = 'block';
+            
+            // Show continue button after 5 seconds
+            setTimeout(() => {
+                if (!videoEnded) {
+                    document.getElementById('continueBtn').style.display = 'block';
+                }
+            }, 5000);
+            
+            // Auto-show question after video duration (10 seconds for your video)
+            setTimeout(() => {
+                showQuestion();
+            }, 10000);
+        }
+
+        function showQuestion() {
+            if (!videoEnded) {
+                const video1Container = document.getElementById('video1Container');
+                const questionSection = document.getElementById('questionSection');
+                const continueBtn = document.getElementById('continueBtn');
+                
+                // Hide continue button
+                continueBtn.style.display = 'none';
+                
+                // Shrink the video
+                video1Container.classList.add('shrink');
+                
+                // Show question section
+                setTimeout(() => {
+                    questionSection.style.display = 'block';
+                    videoEnded = true;
+                }, 300);
+            }
+        }
+
+        function moveButton() {
+            const noBtn = document.getElementById('noBtn');
+            const container = document.querySelector('.button-container');
+            
+            // Increment attempts
+            noClickAttempts++;
+            
+            // Update button text
+            if (noClickAttempts < noButtonTexts.length) {
+                noBtn.textContent = noButtonTexts[noClickAttempts];
+            }
+            
+            // Update counter
+            document.getElementById('counter').textContent = 
+                `You've tried to say no ${noClickAttempts} time${noClickAttempts > 1 ? 's' : ''}! 😄`;
+            
+            // Get container dimensions
+            const containerRect = container.getBoundingClientRect();
+            const btnRect = noBtn.getBoundingClientRect();
+            
+            // Calculate max positions
+            const maxX = containerRect.width - btnRect.width;
+            const maxY = containerRect.height - btnRect.height;
+            
+            // Generate random positions
+            const randomX = Math.random() * maxX;
+            const randomY = Math.random() * maxY;
+            
+            // Apply new position
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
+            
+            // Shrink no button and grow yes button
+            const newNoScale = Math.max(0.5, 1 - (noClickAttempts * 0.1));
+            const newYesScale = 1 + (noClickAttempts * 0.1);
+            
+            noBtn.style.transform = `translateX(0) scale(${newNoScale})`;
+            document.getElementById('yesBtn').style.transform = `translateX(-50%) scale(${newYesScale})`;
+        }
+
+        function sayYes() {
+            // Hide first video and question
+            document.getElementById('videoSection1').style.display = 'none';
+            document.getElementById('questionSection').style.display = 'none';
+            
+            // Show success section
+            document.getElementById('successSection').style.display = 'block';
+            
+            // Create confetti
+            createConfetti();
+            
+            // Play wedding music at lower volume (20% volume so video can be heard)
+            const music = document.getElementById('weddingMusic');
+            music.volume = 0.2; // Set volume to 20%
+            music.play().catch(e => console.log("Audio autoplay blocked - user can unmute"));
+        }
+
+        function createConfetti() {
+            const colors = ['#ff6b9d', '#ff8fab', '#ffc0cb', '#ff1493', '#ff69b4', '#ffb6c1', '#ffd700', '#ff6347'];
+            const confettiCount = 100;
+            
+            for (let i = 0; i < confettiCount; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDelay = Math.random() * 0.5 + 's';
+                    confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                    
+                    // Random shapes
+                    if (Math.random() > 0.5) {
+                        confetti.style.borderRadius = '50%';
+                    }
+                    
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => confetti.remove(), 3000);
+                }, i * 30);
+            }
+        }
+
+        // Initialize no button position
+        window.addEventListener('load', () => {
+            const noBtn = document.getElementById('noBtn');
+            noBtn.style.left = '50%';
+            noBtn.style.top = '80px';
+            noBtn.style.transform = 'translateX(-50%)';
+        });
+    </script>
+</body>
+</html>
