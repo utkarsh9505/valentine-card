@@ -187,32 +187,56 @@
             background: white;
             border-radius: 15px;
             padding: 20px;
-            min-height: 200px;
+            min-height: 250px;
+            max-height: 400px;
+            overflow-y: auto;
             margin-bottom: 15px;
             box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
 
         .message-bubble {
-            background: linear-gradient(135deg, #e8a4c9, #d89bb8);
-            color: white;
-            padding: 15px 20px;
-            border-radius: 20px 20px 5px 20px;
+            padding: 12px 18px;
+            border-radius: 18px;
             display: inline-block;
-            max-width: 85%;
-            font-size: 24px;
-            font-weight: 500;
-            box-shadow: 0 3px 10px rgba(232, 164, 201, 0.3);
-            animation: slideIn 0.5s ease-out;
+            max-width: 75%;
+            font-size: 16px;
+            font-weight: 400;
+            animation: messageSlideIn 0.4s ease-out;
+            word-wrap: break-word;
         }
 
-        @keyframes slideIn {
+        .message-sent {
+            background: linear-gradient(135deg, #e8a4c9, #d89bb8);
+            color: white;
+            border-radius: 18px 18px 5px 18px;
+            align-self: flex-start;
+            box-shadow: 0 2px 8px rgba(232, 164, 201, 0.3);
+        }
+
+        .message-received {
+            background: #f0f0f0;
+            color: #333;
+            border-radius: 18px 18px 18px 5px;
+            align-self: flex-end;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .message-bubble.highlight {
+            font-size: 20px;
+            font-weight: 500;
+        }
+
+        @keyframes messageSlideIn {
             from {
                 opacity: 0;
-                transform: translateX(-20px);
+                transform: translateY(10px);
             }
             to {
                 opacity: 1;
-                transform: translateX(0);
+                transform: translateY(0);
             }
         }
 
@@ -237,7 +261,7 @@
             border-radius: 20px;
             font-family: 'Lexend', sans-serif;
             pointer-events: none;
-            color: #999;
+            color: #333;
         }
 
         .send-button {
@@ -267,6 +291,15 @@
             font-weight: bold;
         }
 
+        .send-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .send-button:disabled:hover {
+            transform: scale(1);
+        }
+
         .click-me-indicator {
             position: absolute;
             top: -45px;
@@ -279,6 +312,7 @@
             font-weight: 600;
             animation: bounce 1.5s ease-in-out infinite;
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            z-index: 10;
         }
 
         .click-me-indicator::after {
@@ -286,6 +320,52 @@
             display: block;
             font-size: 18px;
             margin-top: 2px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Typing indicator */
+        .typing-indicator {
+            display: none;
+            align-self: flex-start;
+            padding: 12px 18px;
+            background: #f0f0f0;
+            border-radius: 18px;
+            max-width: 75px;
+        }
+
+        .typing-indicator.show {
+            display: block;
+            animation: messageSlideIn 0.4s ease-out;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+        }
+
+        .typing-dots span {
+            width: 8px;
+            height: 8px;
+            background: #999;
+            border-radius: 50%;
+            animation: typingBounce 1.4s infinite;
+        }
+
+        .typing-dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typingBounce {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-8px); }
         }
 
         h1 {
@@ -554,30 +634,23 @@
     <button id="continueBtn" class="continue-btn" onclick="showQuestion()">Continue ➡️</button>
 
     <div class="card">
-        <!-- Screen 1: Chat Interface Greeting -->
+        <!-- Screen 1: Chat Interface with Conversation Flow -->
         <div id="screen1" class="screen active">
             <div class="chat-container">
                 <div class="chat-header">💕 Message</div>
-                <div class="chat-messages">
-                    <div class="message-bubble">Hiiiiiiiiiiiiiii Loveeeeeeee</div>
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message-bubble message-sent highlight">Hiiiiiiiiiiiiiii Loveeeeeeee</div>
                 </div>
                 <div class="chat-input-container">
-                    <input type="text" class="chat-input" value="hiiiiiiii" readonly>
-                    <button class="send-button" onclick="goToScreen(2)"></button>
-                    <div class="click-me-indicator">Click me!</div>
+                    <input type="text" class="chat-input" id="chatInput" value="hiiiiiiii" readonly>
+                    <button class="send-button" id="sendButton" onclick="sendMessage()"></button>
+                    <div class="click-me-indicator" id="clickIndicator">Click me!</div>
                 </div>
             </div>
         </div>
 
-        <!-- Screen 2: Teaser -->
+        <!-- Screen 2: Video with Play Button (was screen 3) -->
         <div id="screen2" class="screen">
-            <div class="heart">😏</div>
-            <h1>Wanna see something meri Afghani Chicken Tikka</h1>
-            <button class="nav-button" onclick="goToScreen(3)">yessss</button>
-        </div>
-
-        <!-- Screen 3: Video with Play Button -->
-        <div id="screen3" class="screen">
             <div class="video-container" id="video1Container">
                 <!-- Play Button Overlay -->
                 <div class="play-overlay" id="playOverlay" onclick="playFirstVideo()">
@@ -593,8 +666,8 @@
             </div>
         </div>
 
-        <!-- Screen 4: Question Section (Hidden Initially) -->
-        <div id="screen4" class="screen">
+        <!-- Screen 3: Question Section -->
+        <div id="screen3" class="screen">
             <div class="heart">❤️</div>
             <h2>Will You Be My Valentine?</h2>
             <p>So... what do you say? 💕</p>
@@ -607,8 +680,8 @@
             <div class="attempt-counter" id="counter"></div>
         </div>
 
-        <!-- Screen 5: Success Section -->
-        <div id="screen5" class="screen">
+        <!-- Screen 4: Success Section -->
+        <div id="screen4" class="screen">
             <div class="celebration">🎉💕🎊</div>
             <h2>Yay! You said Yes!</h2>
             <p>You just made me the happiest person ever! 💖</p>
@@ -631,9 +704,11 @@
         </div>
     </div>
 
-    <!-- Audio for wedding music -->
+    <!-- Audio for background music -->
     <audio id="weddingMusic" loop>
-        <source src="https://www.bensound.com/bensound-music/bensound-happyrock.mp3" type="audio/mpeg">
+        <!-- Replace this file with "Rakhlon Tum Chupake" by Arpit Bala -->
+        <!-- Upload the MP3 to your repo and name it: rakhlon-tum-chupake.mp3 -->
+        <source src="rakhlon-tum-chupake.mp3" type="audio/mpeg">
     </audio>
 
     <script>
@@ -651,11 +726,77 @@
 
         let videoEnded = false;
         let currentScreen = 1;
+        let chatStep = 0; // Track conversation progress
+
+        // Chat conversation flow
+        function sendMessage() {
+            const chatMessages = document.getElementById('chatMessages');
+            const chatInput = document.getElementById('chatInput');
+            const sendButton = document.getElementById('sendButton');
+            const clickIndicator = document.getElementById('clickIndicator');
+            
+            chatStep++;
+            
+            if (chatStep === 1) {
+                // Step 1: Her "hiiiiiiii" reply
+                clickIndicator.classList.add('hidden');
+                sendButton.disabled = true;
+                
+                // Add her message
+                const herMessage = document.createElement('div');
+                herMessage.className = 'message-bubble message-received';
+                herMessage.textContent = 'hiiiiiiii';
+                chatMessages.appendChild(herMessage);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                
+                // Wait, then show "Wanna see something"
+                setTimeout(() => {
+                    const myMessage = document.createElement('div');
+                    myMessage.className = 'message-bubble message-sent';
+                    myMessage.textContent = 'Wanna see something meri Afghani Chicken Tikka';
+                    chatMessages.appendChild(myMessage);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                    
+                    // Update input and enable button
+                    setTimeout(() => {
+                        chatInput.value = 'yessss';
+                        sendButton.disabled = false;
+                        clickIndicator.classList.remove('hidden');
+                    }, 800);
+                }, 1000);
+                
+            } else if (chatStep === 2) {
+                // Step 2: Her "yessss" reply
+                clickIndicator.classList.add('hidden');
+                sendButton.disabled = true;
+                
+                // Add her message
+                const herMessage = document.createElement('div');
+                herMessage.className = 'message-bubble message-received';
+                herMessage.textContent = 'yessss';
+                chatMessages.appendChild(herMessage);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                
+                // Wait, then show "aight" and transition to video
+                setTimeout(() => {
+                    const myMessage = document.createElement('div');
+                    myMessage.className = 'message-bubble message-sent';
+                    myMessage.textContent = 'aight';
+                    chatMessages.appendChild(myMessage);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                    
+                    // Transition to video screen
+                    setTimeout(() => {
+                        goToScreen(2);
+                    }, 1000);
+                }, 1000);
+            }
+        }
 
         function goToScreen(screenNumber) {
             // Add exit animation to current screen
             const currentScreenElement = document.getElementById('screen' + currentScreen);
-            if (currentScreenElement) {
+            if (currentScreenElement && currentScreenElement.classList.contains('active')) {
                 currentScreenElement.classList.add('exit-left');
                 
                 // Wait for exit animation to complete
@@ -706,8 +847,8 @@
             if (!videoEnded) {
                 const video1Container = document.getElementById('video1Container');
                 const continueBtn = document.getElementById('continueBtn');
+                const screen2 = document.getElementById('screen2');
                 const screen3 = document.getElementById('screen3');
-                const screen4 = document.getElementById('screen4');
                 
                 // Hide continue button
                 continueBtn.style.display = 'none';
@@ -715,12 +856,12 @@
                 // Shrink the video with smooth transition
                 video1Container.classList.add('shrink');
                 
-                // Keep screen3 visible and show screen4 with fade-in
+                // Keep screen2 visible and show screen3 with fade-in
                 setTimeout(() => {
-                    screen4.style.display = 'block';
+                    screen3.style.display = 'block';
                     // Force reflow for animation
-                    screen4.offsetHeight;
-                    screen4.classList.add('active');
+                    screen3.offsetHeight;
+                    screen3.classList.add('active');
                     videoEnded = true;
                 }, 500); // Wait for video shrink animation
             }
@@ -767,32 +908,32 @@
         }
 
         function sayYes() {
+            const screen2 = document.getElementById('screen2');
             const screen3 = document.getElementById('screen3');
-            const screen4 = document.getElementById('screen4');
             
             // Add fade out animation
+            screen2.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
             screen3.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
-            screen4.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
+            screen2.style.opacity = '0';
             screen3.style.opacity = '0';
-            screen4.style.opacity = '0';
+            screen2.style.transform = 'scale(0.9)';
             screen3.style.transform = 'scale(0.9)';
-            screen4.style.transform = 'scale(0.9)';
             
             setTimeout(() => {
                 // Hide video screen and question screen
+                screen2.classList.remove('active');
                 screen3.classList.remove('active');
-                screen4.classList.remove('active');
+                screen2.style.display = 'none';
                 screen3.style.display = 'none';
-                screen4.style.display = 'none';
                 
                 // Reset styles
+                screen2.style.opacity = '';
                 screen3.style.opacity = '';
-                screen4.style.opacity = '';
+                screen2.style.transform = '';
                 screen3.style.transform = '';
-                screen4.style.transform = '';
                 
                 // Go to success screen
-                goToScreen(5);
+                goToScreen(4);
                 
                 // Create confetti after a short delay
                 setTimeout(() => {
