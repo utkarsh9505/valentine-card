@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Will You Be My Valentine? 💕</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -12,8 +15,8 @@
         }
 
         body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #ff6b9d 0%, #c06c84 50%, #f67280 100%);
+            font-family: 'Lexend', sans-serif;
+            background: linear-gradient(135deg, #f8b4d9 0%, #e8a4c9 50%, #d89bb8 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -55,6 +58,7 @@
             overflow: hidden;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             transition: all 0.5s ease;
+            position: relative;
         }
 
         .video-container.shrink {
@@ -69,24 +73,25 @@
             border-radius: 15px;
         }
 
-        /* Start Button for First Video */
-        .start-button {
-            background: linear-gradient(135deg, #ff6b9d, #ff8fab);
+        /* Navigation Buttons */
+        .nav-button {
+            background: linear-gradient(135deg, #e8a4c9, #d89bb8);
             color: white;
-            padding: 20px 50px;
-            font-size: 24px;
-            font-weight: bold;
+            padding: 18px 45px;
+            font-size: 22px;
+            font-weight: 600;
             border: none;
             border-radius: 50px;
             cursor: pointer;
-            box-shadow: 0 10px 30px rgba(255, 107, 157, 0.4);
+            box-shadow: 0 8px 25px rgba(232, 164, 201, 0.4);
             transition: all 0.3s ease;
             animation: pulse 2s ease-in-out infinite;
+            font-family: 'Lexend', sans-serif;
         }
 
-        .start-button:hover {
+        .nav-button:hover {
             transform: scale(1.05);
-            box-shadow: 0 15px 40px rgba(255, 107, 157, 0.6);
+            box-shadow: 0 12px 35px rgba(232, 164, 201, 0.6);
         }
 
         @keyframes pulse {
@@ -94,36 +99,55 @@
             50% { transform: scale(1.05); }
         }
 
-        #startScreen {
-            text-align: center;
-        }
-
-        #startScreen h1 {
-            color: #ff6b9d;
-            font-size: 32px;
-            margin-bottom: 30px;
-        }
-
-        #startScreen .heart {
-            font-size: 80px;
-            margin-bottom: 30px;
-            animation: heartbeat 1.5s ease-in-out infinite;
-        }
-
-        /* Question Section */
-        #questionSection {
+        /* Screen sections */
+        .screen {
             display: none;
-            animation: slideDown 0.5s ease;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         }
 
-        @keyframes slideDown {
+        .screen.active {
+            display: block;
+            opacity: 1;
+            transform: translateX(0);
+            animation: slideInRight 0.6s ease-out;
+        }
+
+        .screen.exit-left {
+            animation: slideOutLeft 0.5s ease-in forwards;
+        }
+
+        @keyframes slideInRight {
             from {
                 opacity: 0;
-                transform: translateY(-20px);
+                transform: translateX(100%);
             }
             to {
                 opacity: 1;
-                transform: translateY(0);
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideOutLeft {
+            from {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateX(-100%);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
             }
         }
 
@@ -139,11 +163,145 @@
             20%, 40% { transform: scale(1.1); }
         }
 
-        h1 {
-            color: #ff6b9d;
-            font-size: 28px;
+        /* Chat Interface Styles */
+        .chat-container {
+            background: #f5f5f5;
+            border-radius: 20px;
+            padding: 20px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .chat-header {
+            text-align: center;
+            padding: 15px;
+            background: linear-gradient(135deg, #e8a4c9, #d89bb8);
+            color: white;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        .chat-messages {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            min-height: 200px;
             margin-bottom: 15px;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .message-bubble {
+            background: linear-gradient(135deg, #e8a4c9, #d89bb8);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 20px 20px 5px 20px;
+            display: inline-block;
+            max-width: 85%;
+            font-size: 24px;
+            font-weight: 500;
+            box-shadow: 0 3px 10px rgba(232, 164, 201, 0.3);
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .chat-input-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: white;
+            padding: 12px 15px;
+            border-radius: 25px;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .chat-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 16px;
+            padding: 8px 12px;
+            background: #f5f5f5;
+            border-radius: 20px;
+            font-family: 'Lexend', sans-serif;
+            pointer-events: none;
+            color: #999;
+        }
+
+        .send-button {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #e8a4c9, #d89bb8);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(232, 164, 201, 0.4);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .send-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(232, 164, 201, 0.6);
+        }
+
+        .send-button::before {
+            content: '➤';
+            color: white;
+            font-size: 20px;
             font-weight: bold;
+        }
+
+        .click-me-indicator {
+            position: absolute;
+            top: -45px;
+            right: -10px;
+            background: #d89bb8;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 14px;
+            font-weight: 600;
+            animation: bounce 1.5s ease-in-out infinite;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .click-me-indicator::after {
+            content: '👇';
+            display: block;
+            font-size: 18px;
+            margin-top: 2px;
+        }
+
+        h1 {
+            color: #d89bb8;
+            font-size: 38px;
+            margin-bottom: 30px;
+            font-weight: 700;
+            font-family: 'Lexend', sans-serif;
+        }
+
+        h2 {
+            color: #d89bb8;
+            font-size: 28px;
+            margin-bottom: 20px;
+            font-weight: 600;
+            font-family: 'Lexend', sans-serif;
         }
 
         p {
@@ -151,8 +309,82 @@
             font-size: 16px;
             margin-bottom: 30px;
             line-height: 1.6;
+            font-family: 'Lexend', sans-serif;
         }
 
+        /* Play Button Overlay */
+        .play-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 15px;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .play-button {
+            width: 0;
+            height: 0;
+            border-left: 50px solid white;
+            border-top: 30px solid transparent;
+            border-bottom: 30px solid transparent;
+            margin-left: 10px;
+            filter: drop-shadow(0 4px 15px rgba(255, 255, 255, 0.5));
+            transition: all 0.3s ease;
+            animation: playPulse 2s ease-in-out infinite;
+        }
+
+        .play-overlay:hover .play-button {
+            transform: scale(1.2);
+            filter: drop-shadow(0 6px 20px rgba(255, 255, 255, 0.8));
+        }
+
+        @keyframes playPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
+
+        /* Arrow pointing to play button */
+        .play-arrow {
+            position: absolute;
+            top: -70px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 24px;
+            font-weight: 600;
+            color: #d89bb8;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            animation: bounce 1.5s ease-in-out infinite;
+            background: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            font-family: 'Lexend', sans-serif;
+        }
+
+        .play-arrow::after {
+            content: '👇';
+            display: block;
+            font-size: 30px;
+            margin-top: 5px;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(10px); }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Question Section Buttons */
         .button-container {
             position: relative;
             height: 150px;
@@ -162,17 +394,18 @@
         button {
             padding: 15px 40px;
             font-size: 20px;
-            font-weight: bold;
+            font-weight: 600;
             border: none;
             border-radius: 50px;
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
             position: absolute;
+            font-family: 'Lexend', sans-serif;
         }
 
         #yesBtn {
-            background: linear-gradient(135deg, #ff6b9d, #ff8fab);
+            background: linear-gradient(135deg, #e8a4c9, #d89bb8);
             color: white;
             left: 50%;
             top: 20px;
@@ -182,7 +415,7 @@
 
         #yesBtn:hover {
             transform: translateX(-50%) scale(1.1);
-            box-shadow: 0 8px 25px rgba(255, 107, 157, 0.4);
+            box-shadow: 0 8px 25px rgba(232, 164, 201, 0.4);
         }
 
         #noBtn {
@@ -198,51 +431,36 @@
 
         .attempt-counter {
             margin-top: 160px;
-            color: #ff6b9d;
+            color: #d89bb8;
             font-size: 14px;
             font-style: italic;
+            font-family: 'Lexend', sans-serif;
         }
 
         /* Success Section */
-        #successSection {
-            display: none;
-            animation: fadeIn 0.6s ease-in;
-        }
-
         .celebration {
             font-size: 50px;
             margin: 20px 0;
         }
 
-        #successSection h2 {
-            color: #ff6b9d;
-            font-size: 32px;
-            margin-bottom: 15px;
-        }
-
-        #successSection p {
-            color: #666;
-            font-size: 18px;
-            margin-bottom: 20px;
-        }
-
         .youtube-link {
             display: inline-block;
-            background: linear-gradient(135deg, #FF0000, #CC0000);
+            background: linear-gradient(135deg, #e8a4c9, #d89bb8);
             color: white;
             padding: 15px 30px;
             border-radius: 50px;
             text-decoration: none;
             font-size: 18px;
-            font-weight: bold;
+            font-weight: 600;
             margin-top: 20px;
-            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3);
+            box-shadow: 0 5px 15px rgba(232, 164, 201, 0.3);
             transition: all 0.3s ease;
+            font-family: 'Lexend', sans-serif;
         }
 
         .youtube-link:hover {
             transform: scale(1.05);
-            box-shadow: 0 8px 25px rgba(255, 0, 0, 0.4);
+            box-shadow: 0 8px 25px rgba(232, 164, 201, 0.4);
         }
 
         /* Confetti */
@@ -250,7 +468,7 @@
             position: fixed;
             width: 10px;
             height: 10px;
-            background: #ff6b9d;
+            background: #e8a4c9;
             position: absolute;
             animation: confetti-fall 3s linear forwards;
         }
@@ -268,7 +486,7 @@
             bottom: 30px;
             right: 30px;
             padding: 10px 20px;
-            background: rgba(255, 107, 157, 0.9);
+            background: rgba(232, 164, 201, 0.9);
             color: white;
             border: none;
             border-radius: 25px;
@@ -277,10 +495,11 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
             z-index: 1000;
             display: none;
+            font-family: 'Lexend', sans-serif;
         }
 
         .continue-btn:hover {
-            background: rgba(255, 107, 157, 1);
+            background: rgba(232, 164, 201, 1);
             transform: scale(1.05);
         }
 
@@ -291,7 +510,11 @@
             }
 
             h1 {
-                font-size: 24px;
+                font-size: 30px;
+            }
+
+            h2 {
+                font-size: 22px;
             }
             
             p {
@@ -307,17 +530,9 @@
                 font-size: 50px;
             }
 
-            #successSection h2 {
-                font-size: 26px;
-            }
-
-            .start-button {
-                padding: 15px 40px;
-                font-size: 20px;
-            }
-
-            #startScreen h1 {
-                font-size: 26px;
+            .nav-button {
+                padding: 15px 35px;
+                font-size: 18px;
             }
 
             .continue-btn {
@@ -326,6 +541,12 @@
                 font-size: 14px;
                 padding: 8px 16px;
             }
+
+            .play-arrow {
+                font-size: 20px;
+                padding: 8px 16px;
+                top: -65px;
+            }
         }
     </style>
 </head>
@@ -333,30 +554,49 @@
     <button id="continueBtn" class="continue-btn" onclick="showQuestion()">Continue ➡️</button>
 
     <div class="card">
-        <!-- Start Screen -->
-        <div id="startScreen">
-            <div class="heart">💕</div>
-            <h1>I have something special to ask you...</h1>
-            <button class="start-button" onclick="startExperience()">Click to Start ✨</button>
+        <!-- Screen 1: Chat Interface Greeting -->
+        <div id="screen1" class="screen active">
+            <div class="chat-container">
+                <div class="chat-header">💕 Message</div>
+                <div class="chat-messages">
+                    <div class="message-bubble">Hiiiiiiiiiiiiiii Loveeeeeeee</div>
+                </div>
+                <div class="chat-input-container">
+                    <input type="text" class="chat-input" value="hiiiiiiii" readonly>
+                    <button class="send-button" onclick="goToScreen(2)"></button>
+                    <div class="click-me-indicator">Click me!</div>
+                </div>
+            </div>
         </div>
 
-        <!-- First Video Section -->
-        <div id="videoSection1" style="display: none;">
+        <!-- Screen 2: Teaser -->
+        <div id="screen2" class="screen">
+            <div class="heart">😏</div>
+            <h1>Wanna see something meri Afghani Chicken Tikka</h1>
+            <button class="nav-button" onclick="goToScreen(3)">yessss</button>
+        </div>
+
+        <!-- Screen 3: Video with Play Button -->
+        <div id="screen3" class="screen">
             <div class="video-container" id="video1Container">
-                <!-- LOCAL VIDEO PATH - Update this to match your video filename -->
-                <!-- If your video is named "video1.mp4", use: src="video1.mp4" -->
-                <!-- If in a folder, use: src="videos/video1.mp4" -->
-                <video id="firstVideo" playsinline autoplay muted>
+                <!-- Play Button Overlay -->
+                <div class="play-overlay" id="playOverlay" onclick="playFirstVideo()">
+                    <div class="play-arrow">PLAY ME!</div>
+                    <div class="play-button"></div>
+                </div>
+                
+                <!-- LOCAL VIDEO PATH -->
+                <video id="firstVideo" playsinline>
                     <source src="video1.mp4" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
             </div>
         </div>
 
-        <!-- Question Section (Hidden Initially) -->
-        <div id="questionSection">
+        <!-- Screen 4: Question Section (Hidden Initially) -->
+        <div id="screen4" class="screen">
             <div class="heart">❤️</div>
-            <h1>Will You Be My Valentine?</h1>
+            <h2>Will You Be My Valentine?</h2>
             <p>So... what do you say? 💕</p>
             
             <div class="button-container">
@@ -367,15 +607,14 @@
             <div class="attempt-counter" id="counter"></div>
         </div>
 
-        <!-- Success Section (Hidden Initially) -->
-        <div id="successSection">
+        <!-- Screen 5: Success Section -->
+        <div id="screen5" class="screen">
             <div class="celebration">🎉💕🎊</div>
             <h2>Yay! You said Yes!</h2>
             <p>You just made me the happiest person ever! 💖</p>
             
             <!-- Second Video -->
             <div class="video-container">
-                <!-- LOCAL VIDEO PATH - Update this to match your second video filename -->
                 <video id="secondVideo" playsinline autoplay>
                     <source src="video2.mp4" type="video/mp4">
                     Your browser does not support the video tag.
@@ -385,7 +624,7 @@
             <p>And as a special gift for you... 🎁</p>
             
             <a href="https://www.youtube.com/@theroyalutkarsh2895" target="_blank" class="youtube-link">
-                🎬 Check out my childhood YouTube channel!
+                a surprise early valentines gift for you😘
             </a>
             
             <div class="celebration">✨💝✨</div>
@@ -411,16 +650,40 @@
         ];
 
         let videoEnded = false;
+        let currentScreen = 1;
 
-        function startExperience() {
-            // Hide start screen
-            document.getElementById('startScreen').style.display = 'none';
-            
-            // Show first video
-            document.getElementById('videoSection1').style.display = 'block';
-            
-            // Play the video
+        function goToScreen(screenNumber) {
+            // Add exit animation to current screen
+            const currentScreenElement = document.getElementById('screen' + currentScreen);
+            if (currentScreenElement) {
+                currentScreenElement.classList.add('exit-left');
+                
+                // Wait for exit animation to complete
+                setTimeout(() => {
+                    // Hide current screen
+                    currentScreenElement.classList.remove('active', 'exit-left');
+                    
+                    // Show new screen with entrance animation
+                    const newScreen = document.getElementById('screen' + screenNumber);
+                    newScreen.classList.add('active');
+                    
+                    currentScreen = screenNumber;
+                }, 500); // Match the exit animation duration
+            } else {
+                // First load, no animation needed
+                document.getElementById('screen' + screenNumber).classList.add('active');
+                currentScreen = screenNumber;
+            }
+        }
+
+        function playFirstVideo() {
             const firstVideo = document.getElementById('firstVideo');
+            const playOverlay = document.getElementById('playOverlay');
+            
+            // Hide play button overlay
+            playOverlay.classList.add('hidden');
+            
+            // Play the video with sound
             firstVideo.play();
             
             // Listen for video end
@@ -442,20 +705,24 @@
         function showQuestion() {
             if (!videoEnded) {
                 const video1Container = document.getElementById('video1Container');
-                const questionSection = document.getElementById('questionSection');
                 const continueBtn = document.getElementById('continueBtn');
+                const screen3 = document.getElementById('screen3');
+                const screen4 = document.getElementById('screen4');
                 
                 // Hide continue button
                 continueBtn.style.display = 'none';
                 
-                // Shrink the video
+                // Shrink the video with smooth transition
                 video1Container.classList.add('shrink');
                 
-                // Show question section
+                // Keep screen3 visible and show screen4 with fade-in
                 setTimeout(() => {
-                    questionSection.style.display = 'block';
+                    screen4.style.display = 'block';
+                    // Force reflow for animation
+                    screen4.offsetHeight;
+                    screen4.classList.add('active');
                     videoEnded = true;
-                }, 300);
+                }, 500); // Wait for video shrink animation
             }
         }
 
@@ -500,28 +767,52 @@
         }
 
         function sayYes() {
-            // Hide first video and question
-            document.getElementById('videoSection1').style.display = 'none';
-            document.getElementById('questionSection').style.display = 'none';
+            const screen3 = document.getElementById('screen3');
+            const screen4 = document.getElementById('screen4');
             
-            // Show success section
-            document.getElementById('successSection').style.display = 'block';
+            // Add fade out animation
+            screen3.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
+            screen4.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
+            screen3.style.opacity = '0';
+            screen4.style.opacity = '0';
+            screen3.style.transform = 'scale(0.9)';
+            screen4.style.transform = 'scale(0.9)';
             
-            // Create confetti
-            createConfetti();
-            
-            // Play wedding music at lower volume (20% so video can be heard)
-            const music = document.getElementById('weddingMusic');
-            music.volume = 0.2;
-            music.play().catch(e => console.log("Audio autoplay blocked"));
-            
-            // Play second video
-            const secondVideo = document.getElementById('secondVideo');
-            secondVideo.play().catch(e => console.log("Video autoplay blocked"));
+            setTimeout(() => {
+                // Hide video screen and question screen
+                screen3.classList.remove('active');
+                screen4.classList.remove('active');
+                screen3.style.display = 'none';
+                screen4.style.display = 'none';
+                
+                // Reset styles
+                screen3.style.opacity = '';
+                screen4.style.opacity = '';
+                screen3.style.transform = '';
+                screen4.style.transform = '';
+                
+                // Go to success screen
+                goToScreen(5);
+                
+                // Create confetti after a short delay
+                setTimeout(() => {
+                    createConfetti();
+                }, 300);
+                
+                // Play wedding music at 20% volume
+                const music = document.getElementById('weddingMusic');
+                music.volume = 0.2;
+                music.play().catch(e => console.log("Audio autoplay blocked"));
+                
+                // Play second video at full volume
+                const secondVideo = document.getElementById('secondVideo');
+                secondVideo.volume = 1.0;
+                secondVideo.play().catch(e => console.log("Video autoplay blocked"));
+            }, 500);
         }
 
         function createConfetti() {
-            const colors = ['#ff6b9d', '#ff8fab', '#ffc0cb', '#ff1493', '#ff69b4', '#ffb6c1', '#ffd700', '#ff6347'];
+            const colors = ['#e8a4c9', '#d89bb8', '#f8b4d9', '#ffc0cb', '#ffb6c1', '#ffd700', '#ff6347'];
             const confettiCount = 100;
             
             for (let i = 0; i < confettiCount; i++) {
