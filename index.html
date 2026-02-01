@@ -684,7 +684,7 @@
         <div id="screen4" class="screen">
             <div class="celebration">🎉💕🎊</div>
             <h2>Yay! You said Yes!</h2>
-            <p>You just made me the happiest person ever! 💖</p>
+            <p>Phirse Crazy kar diya 👅👅 💖</p>
             
             <!-- Second Video -->
             <div class="video-container">
@@ -753,7 +753,7 @@
                 setTimeout(() => {
                     const myMessage = document.createElement('div');
                     myMessage.className = 'message-bubble message-sent';
-                    myMessage.textContent = 'Wanna see something meri Afghani Chicken Tikka';
+                    myMessage.textContent = 'Wanna see something meri pyaari love';
                     chatMessages.appendChild(myMessage);
                     chatMessages.scrollTop = chatMessages.scrollHeight;
                     
@@ -910,6 +910,10 @@
         function sayYes() {
             const screen2 = document.getElementById('screen2');
             const screen3 = document.getElementById('screen3');
+            const firstVideo = document.getElementById('firstVideo');
+            
+            // Mute the first video immediately to avoid audio overlap
+            firstVideo.muted = true;
             
             // Add fade out animation
             screen2.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
